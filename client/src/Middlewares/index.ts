@@ -1,5 +1,5 @@
-import { SET_ALERT_AMOUNT, SET_ALERT_PERCENTAGE, SET_ALERT_DURATION, SET_ALERT_STATUS_CHECK, Status, IAlert } from "../Constants";
-import { setErrorAlertAmount, setErrorAlertPercentage, setErrorAlertDuration, setAlertStatusSuccessAction, setAlertStatusError } from "../Actions";
+import { SET_ALERT_AMOUNT, SET_ALERT_PERCENTAGE, SET_ALERT_DURATION, SET_ALERT_STATUS_CHECK, Status, IAlert, REGEX_EMAIL } from "../Constants";
+import { setErrorAlertAmount, setErrorAlertPercentage, setErrorAlertDuration, setAlertStatusSuccessAction, setAlertStatusError, updateCurrencyPrice } from "../Actions";
 import { Dispatch } from "redux";
 
 interface IMiddleware {
@@ -49,10 +49,12 @@ const validateAlertPercentage = (alertPercentage: string): IPercentage => {
     return { error: "", duration: +alertDuration };
   };
 
-  const validateAlertStatus = (alert: IAlert): string => {
+  const validateAlertStatus = (alert: IAlert, email: string): string => {
+    if(!REGEX_EMAIL.test(email.toLowerCase()))
+        return "Email is invalid!"
     if(alert.currency === "")
         return "No currency provided"
-    else if(alert.amount === 0)
+    else if(alert.amount === 0 && (alert.condition.value === "Above" || alert.condition.value === "Below"))
         return "Target amount is set to 0 !"
     else{
       const { value, percentage, duration } = alert.condition;
@@ -112,8 +114,10 @@ export const alertStatusMiddleware = ({ dispatch, getState }: IMiddleware) => (
         // start action, must check
         else{      
             const state = getState();
+            const { email } = state;
+            // eslint-disable-next-line
             const { [id]: alert, ...rest } = state.alerts;
-            const error = validateAlertStatus(alert);
+            const error = validateAlertStatus(alert, email);
             if (error === "")
                 dispatch(setAlertStatusSuccessAction(id, Status.started));
             else
@@ -121,3 +125,49 @@ export const alertStatusMiddleware = ({ dispatch, getState }: IMiddleware) => (
           }
     }
   };
+
+  export const socketMiddleware = ({ dispatch }: IMiddleware) => {
+    let socket: any = null;
+
+    const onOpen = () => {
+      console.log('websocket open');
+    };
+  
+    const onClose = () => {
+      console.log("store closed")
+    };
+  
+    const onMessage = (event: any) => {
+      const payload = JSON.parse(event.data);
+      if(payload !== "connectionTest"){
+        let { rate: price, isMet, id } = payload;
+        price = Math.round(price * 100000) / 100000;
+        dispatch(updateCurrencyPrice({ id, price, isMet }));
+      }
+
+    };
+
+    return (next: any) => (action: any) => {
+      switch (action.type) {
+        case 'WS_CONNECT':
+          if (socket !== null) {
+            socket.close();
+          }
+          const { host } = action.payload;
+          // connect to the remote host
+          socket = new WebSocket(host);
+          // websocket handlers
+          socket.addEventListener("message", onMessage);
+          socket.addEventListener("close", onClose)
+          socket.addEventListener("open", onOpen);
+          break;
+        case 'WS_DISCONNECT':
+          if (socket !== null) 
+              socket.close();
+          socket = null;
+          break;
+        default:
+          return next(action);
+      }
+    }
+  }

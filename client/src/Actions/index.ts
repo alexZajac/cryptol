@@ -22,6 +22,9 @@ import {
     SET_ALERT_STATUS_ERROR,
     SET_ALERT_STATUS_CHECK,
     SET_ALERT_CURRENCY_ID,
+    WS_CONNECT,
+    WS_DISCONNECT,
+    SET_EMAIL,
     IAlert, 
     ObjectLayout,
     Status,
@@ -142,6 +145,21 @@ export const updateCurrencyId = (payload: object) => ({
     payload
 });
 
+export const wsConnect = (payload: object) => ({
+    type: WS_CONNECT,
+    payload
+});
+
+export const wsDisconnect = (payload: object) => ({
+    type: WS_DISCONNECT,
+    payload
+});
+
+export const setEmail = (payload: object) => ({
+    type: SET_EMAIL,
+    payload
+});
+
 // ACTION FUNCTIONS
 export const fetchAlertsAction = () => (dispatch: Dispatch) => {
     dispatch(fetchAlerts());
@@ -149,7 +167,7 @@ export const fetchAlertsAction = () => (dispatch: Dispatch) => {
     .then(res => res.data)
     .then(res => {
         if(res.error)
-            alert(res.error);
+            console.log(res.error);
         // converting results to array
         let alerts: ObjectLayout = {};
         res.forEach((a: IAlert) => alerts[a._id] = ({ ...a, errors: defaultAlertError}))
@@ -164,7 +182,7 @@ export const fetchCurrenciesAction = () => (dispatch: Dispatch) => {
     .then(res => res.data)
     .then(res => {
         if(res.error)
-            alert(res.error);
+            console.log(res.error);
         // converting results to array
         const currencies = res;
         dispatch(fetchCurrencies({ currencies }));
@@ -178,26 +196,13 @@ export const getCreationPriceAction = (id: string, currencyId: string) => (dispa
     .then((res: AxiosResponse<any>) => res.data)
     .then(res => {
         const { error, rate } = res;
-        const price = Math.round(rate * 1000) / 1000;
+        const price = Math.round(rate * 100000) / 100000;
         if(error.length > 0)
             dispatch(updateCurrencyError({ error, id, currency: "" }))
         else
             dispatch(updateCurrencyPrice({ id, price, isMet: false }));
     })
-    .catch(err => alert(err))
-}
-
-export const updateCurrencyPriceAction = (id: string, currencyId: string) => (dispatch: Dispatch) => {
-    const ws = new WebSocket(`ws://localhost:8080/api/getPrice/${id}/${currencyId}`)
-    ws.addEventListener("message", res => {
-        const { error, rate, isMet } = JSON.parse(res.data);
-        const errorMsg = "CoinAPI doesn't have this asset's price for the moment, choose another!"
-        const price = Math.round(rate * 1000) / 1000;
-        if(error.length > 0)
-            dispatch(updateCurrencyError({ error: errorMsg, id, currency: "" }))
-        else
-            dispatch(updateCurrencyPrice({ id, price, isMet }));
-    })
+    .catch(err => console.log(err))
 }
 
 export const createAlertAction = () => (dispatch: Dispatch) => {
@@ -205,14 +210,14 @@ export const createAlertAction = () => (dispatch: Dispatch) => {
     .then((res: AxiosResponse<any>) => res.data)
     .then(res => {
         if(res.error)
-            alert(res.error);
+            console.log(res.error);
         const statusString = res.status;
-        res.status = (<any>Status)[statusString];
+        res.status = (Status as any)[statusString];
         res.errors = defaultAlertError;
         dispatch(createAlert({ alert: res }))
         return res;
     })
-    .catch(err => alert(err))
+    .catch(err => console.log(err))
 }
 
 export const deleteAlertAction = (id: string) => (dispatch: Dispatch) => {
@@ -220,17 +225,19 @@ export const deleteAlertAction = (id: string) => (dispatch: Dispatch) => {
     .then((res: AxiosResponse<any>) => res.data)
     .then(res => {
         if(res.error)
-            alert(res.error);
+            console.log(res.error);
         dispatch(deleteAlert({ _id: res }))
         return res;
     })
-    .catch(err => alert(err))
+    .catch(err => console.log(err))
 }
 
 export const setAlertStatusSuccessAction = (id: string, status: Status) => (dispatch: Dispatch, getState: any) => {
-    const alert = getState().alerts[id];
+    const state = getState()
+    const { email } = state;
+    const alert = state.alerts[id]
     alert.status = status;
-    axios.put(`/api/updateAlert/${id}`, JSON.stringify(alert))
+    axios.put(`/api/updateAlert/${id}`, JSON.stringify({ ...alert, email }))
     .then((res: AxiosResponse<any>) => res.data)
     .then(res => {
         if(res.error)
@@ -239,5 +246,19 @@ export const setAlertStatusSuccessAction = (id: string, status: Status) => (disp
         dispatch(setAlertStatus({ id, status }))
         return id;
     })
-    .catch(err => alert(err))
+    .catch(err => console.log(err))
+}
+
+export const monitorAction = (id: string, currencyId: string) => (dispatch: Dispatch, getState: any) => {
+    axios(`/api/getPrice/${id}/${currencyId}`)
+    .then((res: AxiosResponse<any>) => res.data)
+    .then(res => {
+        const { error, rate, isMet } = res;
+        const price = Math.round(rate * 100000) / 100000;
+        if(error.length > 0)
+            dispatch(updateCurrencyError({ error, id, currency: "" }))
+        else
+            dispatch(updateCurrencyPrice({ id, price, isMet }));
+    })
+    .catch(err => console.log(err))
 }

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import styled from "styled-components"
-import { ERROR, SUCCESS, PRICE_UPDATE_INTERVAL, IRootState, Status, ErrorLayout } from '../../Constants';
+import { ERROR, SUCCESS, IRootState, Status, PRICE_UPDATE_INTERVAL } from '../../Constants';
 import { connect } from "react-redux"
-import { bindActionCreators, Dispatch } from "redux";
-import { setAlertStatusCheck, setAlertStatusError, updateCurrencyPrice, updateCurrencyPriceAction } from "../../Actions"
+import { bindActionCreators } from "redux";
+import { setAlertStatusCheck, setAlertStatusError, monitorAction } from "../../Actions"
 import 'sweetalert/dist/sweetalert.css';
 const { default: SweetAlert }: any = require('sweetalert-react');
 
@@ -26,15 +26,15 @@ const mapStateToProps = (state: IRootState, ownProps: IPassedProps): IOwnProps =
 }
 
 const mapDispatchToProps = (dispatch: any) => bindActionCreators({
-    updateCurrencyPrice: updateCurrencyPriceAction,
+    monitor: monitorAction,
     setAlertStatus: (id: string, status: Status) => setAlertStatusCheck({ id, status }),
     setAlertStatusError: (id: string, status: Status, error: string) => setAlertStatusError({ id, status, error }),
 }, dispatch);
 
 interface IProps extends IOwnProps, IPassedProps {
-    updateCurrencyPrice: (id: string, currencyId: string) => (dispatch: Dispatch) => void,
     setAlertStatus: (id: string, status: Status) => void,
-    setAlertStatusError: (id: string, status: Status, error: string) => void
+    setAlertStatusError: (id: string, status: Status, error: string) => void,
+    monitor: (id: string, currencyId: string) => void,
 }
 
 const getColor = (status: Status): string => {
@@ -74,7 +74,7 @@ const StatusButton: React.FC<IProps> = (
         setAlertStatus, 
         setAlertStatusError, 
         errorStatus, 
-        updateCurrencyPrice,
+        monitor
     }) => {
     const getText = (): string => {
         if(status === Status.started) return "STOP"
@@ -86,11 +86,11 @@ const StatusButton: React.FC<IProps> = (
     }
     // check price every minute
     useEffect(() => {
-        if(status === Status.started)
-            updateCurrencyPrice(id, currencyId)   
-        // else
-        //     ws.close()
-    }, [status])
+        if(status === Status.started){
+            const i = setInterval(() => monitor(id, currencyId), PRICE_UPDATE_INTERVAL);
+            return () => clearInterval(i);
+        }
+    }, [status, id, currencyId, monitor])
 
     return (
         <>

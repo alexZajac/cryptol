@@ -6,7 +6,7 @@ import Select, { ActionMeta } from "react-select"
 import CurrencySelector from "../CurrencySelector"
 
 import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
+import { bindActionCreators } from "redux";
 import { 
     deleteAlertAction, 
     setAlertStatusCheck, 
@@ -407,6 +407,7 @@ const Alert: React.FC<IProps> = (
                 </CurrencyContainer>
                 <SearchInput 
                     value={amount}
+                    disabled={conditionValue !== "Above" && conditionValue !== "Below"}
                     placeholder="1000.0" 
                     style={{color: colorUi.opposite}}
                     onBlur={() => updateLocalAmount()}
@@ -447,7 +448,7 @@ const Alert: React.FC<IProps> = (
                 <Message style={{color: colorUi.opposite}}>in</Message>
                 <InputContainerSmaller style={{background: colorUi.background}}>
                     <SearchInput 
-                        placeholder="10.0" 
+                        placeholder="10" 
                         value={duration}
                         style={{color: colorUi.opposite, marginLeft: 0, width: "100%"}}
                         onBlur={() => updateLocalDuration()}

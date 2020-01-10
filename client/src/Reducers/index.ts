@@ -16,6 +16,7 @@ import {
     SET_ALERT_STATUS,
     SET_ALERT_STATUS_SUCCESS,
     SET_ALERT_STATUS_ERROR,
+    SET_EMAIL,
     IRootState,
     lightTheme,
     darkTheme,
@@ -47,6 +48,10 @@ const mainReducer = (state: IRootState = initialRootState, action: any): IRootSt
         const { currencies } = action.payload;
         return { ...state, currencies }
     }
+    else if(action.type === SET_EMAIL){
+        const { email } = action.payload;
+        return { ...state, email }
+    }
     else if(action.type === CREATE_ALERT){
         const { alert } = action.payload;
         const { _id } = alert;
@@ -60,6 +65,7 @@ const mainReducer = (state: IRootState = initialRootState, action: any): IRootSt
     }
     else if(action.type === SET_CURRENCY_PRICE){
         const { price, id, isMet } = action.payload;
+        // eslint-disable-next-line
         const { [id]: toChange, ...rest } = state.alerts;
         toChange.creationPrice = price;
         toChange.isMet = isMet;
@@ -69,6 +75,7 @@ const mainReducer = (state: IRootState = initialRootState, action: any): IRootSt
     }
     else if (action.type === SET_CURRENCY_ERROR){
         const { error, id, currency } = action.payload;
+        // eslint-disable-next-line
         const { [id]: toChange, ...rest } = state.alerts;
         toChange.errors = { ...toChange.errors, creationPrice: error};
         toChange.currency = currency;
@@ -78,6 +85,7 @@ const mainReducer = (state: IRootState = initialRootState, action: any): IRootSt
     }
     else if(action.type === UPDATE_CURRENCY_NAME){
         const { id, currency } = action.payload;
+        // eslint-disable-next-line
         const { [id]: toChange, ...rest } = state.alerts;
         toChange.currency = currency;
         const alerts = { ...state.alerts, [id]: toChange };
@@ -85,6 +93,7 @@ const mainReducer = (state: IRootState = initialRootState, action: any): IRootSt
     }
     else if(action.type === SET_ALERT_AMOUNT_ERROR){
         const { id, error, amount } = action.payload;
+        // eslint-disable-next-line
         const { [id]: toChange, ...rest } = state.alerts;
         toChange.errors.amount = error;
         toChange.amount = amount;
@@ -93,6 +102,7 @@ const mainReducer = (state: IRootState = initialRootState, action: any): IRootSt
     }
     else if(action.type === SET_ALERT_PERCENTAGE_ERROR){
         const { id, error, percentage } = action.payload;
+        // eslint-disable-next-line
         const { [id]: toChange, ...rest } = state.alerts;
         toChange.errors.percentage = error;
         toChange.condition.percentage = percentage;
@@ -101,6 +111,7 @@ const mainReducer = (state: IRootState = initialRootState, action: any): IRootSt
     }
     else if(action.type === SET_ALERT_DURATION_ERROR){
         const { id, error, duration } = action.payload;
+        // eslint-disable-next-line
         const { [id]: toChange, ...rest } = state.alerts;
         toChange.errors.duration = error;
         toChange.condition.duration = duration;
@@ -109,6 +120,7 @@ const mainReducer = (state: IRootState = initialRootState, action: any): IRootSt
     }
     else if (action.type === SET_ALERT_CONDITION){
         const { id, condition } = action.payload;
+        // eslint-disable-next-line
         const { [id]: toChange, ...rest } = state.alerts;
         toChange.condition["value"] = condition;
         const alerts = { ...state.alerts, [id]: toChange };
@@ -116,6 +128,7 @@ const mainReducer = (state: IRootState = initialRootState, action: any): IRootSt
     }
     else if (action.type === SET_ALERT_TIMEFRAME){
         const { id, timeframe } = action.payload;
+        // eslint-disable-next-line
         const { [id]: toChange, ...rest } = state.alerts;
         toChange.condition["timeframe"] = timeframe;
         const alerts = { ...state.alerts, [id]: toChange };
@@ -123,6 +136,7 @@ const mainReducer = (state: IRootState = initialRootState, action: any): IRootSt
     }
     else if (action.type === SET_ALERT_STATUS || action.type === SET_ALERT_STATUS_SUCCESS){
         const { id, status } = action.payload;
+        // eslint-disable-next-line
         const { [id]: toChange, ...rest } = state.alerts;
         toChange.status = status;
         const alerts = { ...state.alerts, [id]: toChange };
@@ -130,6 +144,7 @@ const mainReducer = (state: IRootState = initialRootState, action: any): IRootSt
     }
     else if(action.type === SET_ALERT_STATUS_ERROR){
         const { id, error, status } = action.payload;
+        // eslint-disable-next-line
         const { [id]: toChange, ...rest } = state.alerts;
         toChange.status = status;
         toChange.errors = { ...toChange.errors, status: error }
@@ -138,6 +153,7 @@ const mainReducer = (state: IRootState = initialRootState, action: any): IRootSt
     }
     else if(action.type === SET_ALERT_CURRENCY_ID){
         const { id, currencyId } = action.payload;
+        // eslint-disable-next-line
         const { [id]: toChange, ...rest } = state.alerts;
         toChange.currencyId = currencyId;
         const alerts = { ...state.alerts, [id]: toChange };

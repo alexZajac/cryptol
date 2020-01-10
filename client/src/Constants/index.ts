@@ -23,9 +23,14 @@ export const SET_ALERT_STATUS_SUCCESS = "SET_ALERT_STATUS_SUCCESS"
 export const SET_ALERT_STATUS_ERROR = "SET_ALERT_STATUS_ERROR"
 export const SET_ALERT_STATUS_CHECK = "SET_ALERT_STATUS_CHECK"
 export const SET_ALERT_CURRENCY_ID = "SET_ALERT_CURRENCY_ID" 
+export const WS_CONNECT = "WS_CONNECT"
+export const WS_DISCONNECT = "WS_DISCONNECT"
+export const SET_EMAIL = "SET_EMAIL"
+// eslint-disable-next-line
+export const REGEX_EMAIL = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 // 60 seconds
-export const PRICE_UPDATE_INTERVAL = 1000*10;
+export const PRICE_UPDATE_INTERVAL = 1000*60;
 
 // themes 
 export const lightTheme = {
@@ -80,10 +85,6 @@ export const TIMEFRAME_OPTIONS = [
     {
         value: "Days",
         label: "Days"
-    },
-    {
-        value: "Weeks",
-        label: "Weeks"
     },
 ]
 export const getSelectStyles = (width: string, colorUi: UiObject) => ({
@@ -149,7 +150,8 @@ export interface IRootState {
     colorUi: UiObject,
     isFetching: boolean,
     alerts: ObjectLayout,
-    errors: ErrorLayout
+    errors: ErrorLayout,
+    email: string
 }
 
 export const initialRootState: IRootState = {
@@ -158,7 +160,8 @@ export const initialRootState: IRootState = {
     colorUi: lightTheme,
     isFetching: false,
     alerts: {},
-    errors: defaultAlertError
+    errors: defaultAlertError,
+    email: ""
 }
 
 export type ObjectLayout = {

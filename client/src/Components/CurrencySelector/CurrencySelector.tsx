@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
-import styled from "styled-components"
 
 import AsyncSelect from 'react-select/async';
 
 import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
+import { bindActionCreators } from "redux";
 import { updateCurrencyId, updateCurencyName, updateCurrencyError, getCreationPriceAction } from "../../Actions"
 
-import { PRIMARY_1, ERROR, SUCCESS, IAlert, IRootState, Status, UiObject, ICurrency, getSelectStyles } from '../../Constants'
-import { InputActionMeta, ActionMeta, ValueType, OptionTypeBase } from 'react-select';
+import { SUCCESS,  IRootState, UiObject, ICurrency, getSelectStyles } from '../../Constants'
+import { InputActionMeta, ActionMeta } from 'react-select';
 
 import 'sweetalert/dist/sweetalert.css';
 const { default: SweetAlert }: any = require('sweetalert-react');
