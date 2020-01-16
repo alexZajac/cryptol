@@ -54,8 +54,9 @@ const SearchInput = styled.input`
     height: 100%;
     width: 100%;
     background: transparent;
-    font-size: 12px;
+    font-size: 14px;
     font-family: mainMedium;
+    transition: all ease-in-out .2s;
 
     @media only screen and (max-width: 520px) {
         font-size: 10px
@@ -75,7 +76,7 @@ const StatusContainer = styled.div`
 `
 
 const StatusText = styled.p`
-    font-size: 12px;
+    font-size: 14px;
     letter-spacing: 2px;
     color: white;
     font-weight: bold;

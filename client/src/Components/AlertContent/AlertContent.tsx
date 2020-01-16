@@ -37,9 +37,9 @@ const CreateText = styled.div`
     font-size: 14px;
     color: white;   
     font-family: mainBold;
-    letter-spacing: 0.2em;
     letter-spacing: 1px;
     transition: all ease-in-out 0.2s;
+    margin-top: 4px;
 
     @media only screen and (max-width: 500px) {
         font-size: 12px;
