@@ -199,7 +199,10 @@ func sendEmail(alert models.Alert, data models.RateData) {
 		conditionMsg = "The price has " + alert.Condition.Value + " " + strconv.FormatFloat(data.Percentage, 'f', 3, 64) + "% in " + strconv.FormatFloat(alert.Condition.Duration, 'f', 2, 64) + " " + alert.Condition.Timeframe + " or less."
 	}
 	messageString := baseMsg + conditionMsg
-	message := []byte(messageString)
+	message := []byte("To: "+alert.Email+"\r\n" +
+					  "Subject: Watch out! "+alert.Currency+" is moving 🔥\r\n" +
+					  "\r\n" +
+					  messageString+"\r\n")
 	// Authentication.
 	auth := smtp.PlainAuth("", SENDER, SMTP_PASSWORD, smtpServer.Host)
 	// Sending email.
