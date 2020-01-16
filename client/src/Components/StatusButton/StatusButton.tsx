@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from "styled-components"
 import { ERROR, SUCCESS, IRootState, Status, PRICE_UPDATE_INTERVAL } from '../../Constants';
 import { connect } from "react-redux"
@@ -34,7 +34,7 @@ const mapDispatchToProps = (dispatch: any) => bindActionCreators({
 interface IProps extends IOwnProps, IPassedProps {
     setAlertStatus: (id: string, status: Status) => void,
     setAlertStatusError: (id: string, status: Status, error: string) => void,
-    monitor: (id: string, currencyId: string) => void,
+    monitor: any,
 }
 
 const getColor = (status: Status): string => {
@@ -63,7 +63,7 @@ const StatusText = styled.p`
     letter-spacing: 2px;
     color: white;
     font-weight: bold;
-    font-family: Open Sans;
+    font-family: mainBold;
 `
 
 const StatusButton: React.FC<IProps> = (
@@ -76,6 +76,7 @@ const StatusButton: React.FC<IProps> = (
         errorStatus, 
         monitor
     }) => {
+    const [intervalReference, setIntervalReference] = useState(0);
     const getText = (): string => {
         if(status === Status.started) return "STOP"
         return "START"
@@ -87,9 +88,12 @@ const StatusButton: React.FC<IProps> = (
     // check price every minute
     useEffect(() => {
         if(status === Status.started){
-            const i = setInterval(() => monitor(id, currencyId), PRICE_UPDATE_INTERVAL);
-            return () => clearInterval(i);
+            setIntervalReference(setInterval(async() => {
+                await monitor(id, currencyId)
+            }, PRICE_UPDATE_INTERVAL))
         }
+        else
+            clearInterval(intervalReference)
     }, [status, id, currencyId, monitor])
 
     return (

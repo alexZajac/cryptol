@@ -17,7 +17,7 @@ const Container = styled.div`
 `
 
 const MainMessage = styled.h1`
-  font-family: Open Sans;
+  font-family: mainBold;
   font-size: 30px;
   margin-left: 24px;
   margin-right: 24px;
@@ -55,7 +55,7 @@ const SearchInput = styled.input`
     width: 100%;
     background: transparent;
     font-size: 12px;
-    font-family: Open Sans;
+    font-family: mainMedium;
 
     @media only screen and (max-width: 520px) {
         font-size: 10px
@@ -79,7 +79,7 @@ const StatusText = styled.p`
     letter-spacing: 2px;
     color: white;
     font-weight: bold;
-    font-family: Open Sans;
+    font-family: mainBold;
 `
 
 interface IOwnProps {

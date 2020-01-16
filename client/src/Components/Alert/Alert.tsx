@@ -64,7 +64,7 @@ interface ISelectable {
 const Title = styled.p<ISelectable>`
     font-size: 16px;
     letter-spacing: ${p => p.isSelected ? "3px" : "-1px"};
-    font-family: Open Sans;
+    font-family: mainMedium;
     margin-bottom: 20px;
     transition: all ease-in-out 0.2s;
 `
@@ -128,7 +128,7 @@ const SearchInput = styled.input`
     width: 70%;
     background: transparent;
     font-size: 14px;
-    font-family: Open Sans;
+    font-family: mainMedium;
     margin-left: 4px;
 `
 
@@ -151,7 +151,7 @@ const CurrencyContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: Open Sans;
+    font-family: mainMedium;
     font-size: 14px;
     transition: all ease-in-out 0.2s;
 
@@ -167,7 +167,7 @@ const CurrencyContainer = styled.div`
 
 const Message = styled.p`
     font-size: 14px;
-    font-family: Open Sans;
+    font-family: mainMedium;
     margin-left: 10px;    
     margin-right: 10px;   
     transition: all ease-in-out 0.2s;
@@ -188,7 +188,7 @@ const PercentageContainer = styled.div<IVisible>`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 30px;
+    margin-top: 20px;
     transition: all ease-in-out 0.2s;
     opacity: ${p => p.isVisible ? '1' : '0'};
 

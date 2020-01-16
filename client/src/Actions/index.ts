@@ -249,16 +249,14 @@ export const setAlertStatusSuccessAction = (id: string, status: Status) => (disp
     .catch(err => console.log(err))
 }
 
-export const monitorAction = (id: string, currencyId: string) => (dispatch: Dispatch, getState: any) => {
-    axios(`/api/getPrice/${id}/${currencyId}`)
-    .then((res: AxiosResponse<any>) => res.data)
-    .then(res => {
-        const { error, rate, isMet } = res;
-        const price = Math.round(rate * 100000) / 100000;
-        if(error.length > 0)
-            dispatch(updateCurrencyError({ error, id, currency: "" }))
-        else
-            dispatch(updateCurrencyPrice({ id, price, isMet }));
-    })
-    .catch(err => console.log(err))
+export const monitorAction = (id: string, currencyId: string) => async(dispatch: Dispatch) => {
+    const res = await axios(`/api/getPrice/${id}/${currencyId}`)
+    const { data } = res;
+    const { error, rate, isMet } = data;
+    console.log(data, currencyId);
+    const price = Math.round(rate * 100000) / 100000;
+    if(error.length > 0)
+        dispatch(updateCurrencyError({ error, id, currency: "" }))
+    else
+        dispatch(updateCurrencyPrice({ id, price, isMet }));
 }

@@ -1,3 +1,19 @@
+/* Defining gloabl fonts */
+@font-face {
+    font-family: "mainLight";
+    src: url("./Assets/fonts/TTCommons-Light.ttf");
+}
+
+@font-face {
+    font-family: "mainMedium";
+    src: url("./Assets/fonts/TTCommons-Medium.ttf");
+}
+
+@font-face {
+    font-family: "mainBold";
+    src: url("./Assets/fonts/TTCommons-ExtraBold.ttf");
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

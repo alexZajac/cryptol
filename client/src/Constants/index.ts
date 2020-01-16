@@ -89,11 +89,11 @@ export const TIMEFRAME_OPTIONS = [
 ]
 export const getSelectStyles = (width: string, colorUi: UiObject) => ({
     control: (styles: any) => ({ ...styles, background: colorUi.background, marginLeft: "10px", marginRight: "10px"}),
-    input: (styles: any) => ({ ...styles, width, color: colorUi.opposite}),
-    placeholder: (styles: any) => ({ ...styles, fontSize: "14px" }),
-    singleValue: (styles: any) => ({ ...styles, color: colorUi.opposite}),
+    input: (styles: any) => ({ ...styles, width, color: colorUi.opposite, fontFamily: "mainMedium"}),
+    placeholder: (styles: any) => ({ ...styles, fontSize: "14px", fontFamily: "mainMedium" }),
+    singleValue: (styles: any) => ({ ...styles, color: colorUi.opposite, fontFamily: "mainMedium" }),
     option: (styles: any) => 
-        ({ ...styles, background: colorUi.background, color: colorUi.opposite}),
+        ({ ...styles, background: colorUi.background, color: colorUi.opposite, fontFamily: "mainMedium"}),
 })
 
 export interface ICondition {

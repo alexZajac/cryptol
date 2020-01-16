@@ -2,15 +2,15 @@ package middleware
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
 	"net"
+	"net/http"
 	"net/smtp"
-	"crypto/tls"
-	"strconv"
 	"os"
+	"strconv"
 
 	"server/models"
 
@@ -30,6 +30,7 @@ var SENDER = os.Getenv("SENDER")
 var SMTP_PASSWORD = os.Getenv("SMTP_PASSWORD")
 
 const collName = "alert_list"
+
 var collection *mongo.Collection
 
 func init() {
@@ -315,7 +316,7 @@ func insertOneAlert(alert models.Alert, w http.ResponseWriter) {
 // update alert's currency
 func updateAlert(alertId string, newAlert models.Alert, isNew bool) {
 	// retrieve current alert in DB and update it
-	priceUpdates := []float64{ newAlert.CreationPrice }
+	priceUpdates := []float64{newAlert.CreationPrice}
 	if !isNew {
 		priceUpdates = newAlert.PriceUpdates
 	}

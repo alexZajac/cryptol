@@ -36,7 +36,7 @@ const Container = styled.div`
 const CreateText = styled.div`
     font-size: 14px;
     color: white;   
-    font-family: Open Sans;
+    font-family: mainBold;
     letter-spacing: 0.2em;
     letter-spacing: 1px;
     transition: all ease-in-out 0.2s;
