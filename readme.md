@@ -8,7 +8,7 @@ You can monitor prices of several cryptocurrencies **concurrently**, by checking
 
 On the below example, we want to monitor a _min 0.004% increase_ of the BTC value on a timeframe of _less than 5 minutes_.
 
-![](start.png)
+![](https://raw.githubusercontent.com/alexZajac/cryptol/master/start.PNG)
 
 A **dark mode** is implemented, as long as an overall **responsiveness** for mobile devices. Below is a snpashot of the **BTC monitoring** running.
 
@@ -16,7 +16,7 @@ A **dark mode** is implemented, as long as an overall **responsiveness** for mob
 
 Once the alert is met, you will receive an **email** indicating the specific met conditions. Here is an example below: 
 
-![](./email.png)
+![](https://raw.githubusercontent.com/alexZajac/cryptol/master/email.PNG)
 
 ## Instructions
 Launch the app in dev mode:
